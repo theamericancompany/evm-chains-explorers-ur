@@ -69,8 +69,8 @@ if [[ "${_docs}" == "true" ]]; then
     "${pkgbase}-docs"
   )
 fi
-pkgver="0.0.0.0.0.0.0.0.0.0.1.1"
-_commit="e1a9a0d902f87d9d289a065fe7a53acf17ce2f16"
+pkgver="0.0.0.0.0.0.0.0.0.0.1.1.1"
+_commit="0e05d244ec606bd75070876b9ed29825e408befd"
 pkgrel=1
 _pkgdesc=(
   "Retrieval tool for EVM chains explorers."
@@ -128,8 +128,8 @@ _tarfile="${_tarname}.${_archive_format}"
 if [[ "${_offline}" == "true" ]]; then
   _url="file://${HOME}/${pkgname}"
 fi
-_gitlab_sum="168709ed2f5ba09cc6c9bfb6d1b0973b3d44b0822ceaf147e0f40ccc9df4d30b"
-_gitlab_sig_sum="32126ece19316c5b0b2967a952824f743eb4f06d1108fd429aabe64258619818"
+_gitlab_sum="82f33f650b3c16ae426d36b8f678f6d9a8bc0b68435185ec26f12ed6905609ff"
+_gitlab_sig_sum="0f1429295f5953a72c388bdc7e3bc65b756dfee65afbd026abe1a0ef1ae74e63"
 _sum="${_gitlab_sum}"
 _sig_sum="${_gitlab_sig_sum}"
 _evmfs_network="100"
