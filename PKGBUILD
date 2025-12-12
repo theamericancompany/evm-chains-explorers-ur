@@ -59,6 +59,8 @@ fi
 if [[ ! -v "_docs" ]]; then
   _docs="true"
 fi
+_py="python"
+_proj="hip"
 _pkg=evm-chains-explorers
 pkgbase="${_pkg}"
 pkgname=(
@@ -107,6 +109,11 @@ optdepends=(
 makedepends=(
   'make'
 )
+if [[ "${_docs}" == "true" ]]; then
+  makedepends+=(
+    "${_py}-docutils"
+  )
+fi
 if [[ "${_git}" == "true" ]]; then
   makedepends+=(
     "git"
