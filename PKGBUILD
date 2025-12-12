@@ -19,10 +19,13 @@
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Maintainer: Truocolo <truocolo@aol.com>
-# Maintainer: Truocolo <truocolo@0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b>
-# Maintainer: Pellegrino Prevete (dvorak) <pellegrinoprevete@gmail.com>
-# Maintainer: Pellegrino Prevete (dvorak) <dvorak@0x87003Bd6C074C713783df04f36517451fF34CBEf>
+# Maintainers:
+#   Truocolo
+#     <truocolo@aol.com>
+#     <truocolo@0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b>
+#   Pellegrino Prevete (dvorak)
+#     <pellegrinoprevete@gmail.com>
+#     <dvorak@0x87003Bd6C074C713783df04f36517451fF34CBEf>
 
 _os="$( \
   uname \
@@ -39,13 +42,36 @@ if [[ ! -v "_evmfs" ]]; then
     _evmfs="false"
   fi
 fi
-_offline="false"
-_git="false"
+if [[ ! -v "_git" ]]; then
+  _git="false"
+fi
+if [[ ! -v "_offline" ]]; then
+  _offline="false"
+fi
+if [[ ! -v "_git_http" ]]; then
+  _git_http="gitlab"
+fi
+if [[ "${_git_http}" == "github" ]]; then
+  _archive_format="zip"
+elif [[ "${_git_http}" == "gitlab" ]]; then
+  _archive_format="tar.gz"
+fi
+if [[ ! -v "_docs" ]]; then
+  _docs="true"
+fi
 _pkg=evm-chains-explorers
-pkgname="${_pkg}"
+pkgbase="${_pkg}"
+pkgname=(
+  "${_pkg}"
+)
+if [[ "${_docs}" == "true" ]]; then
+  pkgname+=(
+    "${pkgbase}-docs"
+  )
+fi
 pkgver="0.0.0.0.0.0.0.0.0.0.1"
 _commit="fdfac9bc66640f1bacff584deaebd2fb35315cad"
-pkgrel=1
+pkgrel=2
 _pkgdesc=(
   "Retrieval tool for EVM chains explorers."
 )
@@ -53,7 +79,7 @@ pkgdesc="${_pkgdesc[*]}"
 arch=(
   'any'
 )
-_http="https://github.com"
+_http="https://${_git_http}.com"
 _ns="themartiancompany"
 url="${_http}/${_ns}/${pkgname}"
 license=(
@@ -64,19 +90,33 @@ depends=(
   "evm-chains-info"
   "libcrash-bash"
 )
-optdepends=()
-if [[ "${_os}" != "GNU/Linux" ]] && \
-   [[ "${_os}" == "Android" ]]; then
-  depends+=(
-  )
-  optdepends+=(
-  )
-fi
-optdepends+=(
+_evm_chains_explorers_docs_optdepends=(
+  "${_pkg}-docs:"
+    "EVM Chains Explorers"
+    "documentation"
+    "and manuals."
+)
+_evm_chains_explorers_docs_ref_optdepends+=(
+ "${_pkg}:"
+   "The package this documentation"
+   "package pertains to."
+)
+optdepends=(
+  "${_evm_chains_explorers_docs_optdepends[*]}"
 )
 makedepends=(
   'make'
 )
+if [[ "${_git}" == "true" ]]; then
+  makedepends+=(
+    "git"
+  )
+fi
+if [[ "${_evmfs}" == "true" ]]; then
+  makedepends+=(
+    "evmfs"
+  )
+fi
 checkdepends=(
   "shellcheck"
 )
@@ -87,19 +127,17 @@ _tarname="${pkgname}-${_tag}"
 if [[ "${_offline}" == "true" ]]; then
   _url="file://${HOME}/${pkgname}"
 fi
+_archive_sum='ec3ca319fe7df4333b6626a64d5e1965f05c788ce8e34415e04e3a5f889533d9'
+_archive_sig_sum='c3027b9ae9c7954f0560094d13b2c35271e1de89c3f5ea4af95b55ac48359f6e'
 _evmfs_network="100"
 _evmfs_address="0x69470b18f8b8b5f92b48f6199dcb147b4be96571"
 _evmfs_ns="0x87003Bd6C074C713783df04f36517451fF34CBEf"
-_archive_sum='ec3ca319fe7df4333b6626a64d5e1965f05c788ce8e34415e04e3a5f889533d9'
-_evmfs_archive_uri="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}/${_archive_sum}"
+_evmfs_dir="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}"
+_evmfs_archive_uri="${_evmfs_dir}/${_archive_sum}"
 _evmfs_archive_src="${_tarname}.zip::${_evmfs_archive_uri}"
-_archive_sig_sum='c3027b9ae9c7954f0560094d13b2c35271e1de89c3f5ea4af95b55ac48359f6e'
-_archive_sig_uri="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}/${_archive_sig_sum}"
+_archive_sig_uri="${_evmfs_dir}/${_archive_sig_sum}"
 _archive_sig_src="${_tarname}.zip.sig::${_archive_sig_uri}"
 if [[ "${_evmfs}" == "true" ]]; then
-  makedepends+=(
-    "evmfs"
-  )
   _src="${_evmfs_archive_src}"
   _sum="${_archive_sum}"
   source+=(
@@ -109,9 +147,6 @@ if [[ "${_evmfs}" == "true" ]]; then
     "${_archive_sig_sum}"
   )
 elif [[ "${_git}" == true ]]; then
-  makedepends+=(
-    "git"
-  )
   _src="${_tarname}::git+${_url}#${_tag_name}=${_tag}?signed"
   _sum="SKIP"
 elif [[ "${_git}" == false ]]; then
@@ -131,10 +166,12 @@ sha256sums=(
 )
 
 validpgpkeys=(
-  # Truocolo <truocolo@aol.com>
+  # Truocolo
+  #   <truocolo@aol.com>
   '97E989E6CF1D2C7F7A41FF9F95684DBE23D6A3E9'
   'DD6732B02E6C88E9E27E2E0D5FC6652B9D9A6C01'
-  # Pellegrino Prevete (dvorak) <dvorak@0x87003Bd6C074C713783df04f36517451fF34CBEf>
+  # Pellegrino Prevete (dvorak)
+  #   <dvorak@0x87003Bd6C074C713783df04f36517451fF34CBEf>
   '12D8E3D7888F741E89F86EE0FEC8567A644F1D16'
 )
 
@@ -146,13 +183,49 @@ check() {
     check
 }
 
-package() {
+package_evm-chains-explorers() {
+  local \
+    _make_opts=()
+  _make_opts+=(
+    PREFIX="/usr"
+    DESTDIR="${pkgdir}"
+  )
   cd \
     "${_tarname}"
   make \
-    PREFIX="/usr" \
-    DESTDIR="${pkgdir}" \
-    install
+    "${_make_opts[@]}" \
+    install-scripts
+  install \
+    -Dm644 \
+    "COPYING" \
+    -t \
+    "${pkgdir}/usr/share/licenses/${pkgname}/"
+}
+
+package_evm-chains-explorers-docs() {
+  local \
+    _make_opts=()
+  pkgdesc="${pkgdesc} (documentation)"
+  depends=()
+  optdepends=(
+    "${_evm_chains_explorers_ref_optdepends[*]}"
+  )
+  provides=()
+  _make_opts+=(
+    PREFIX="/usr"
+    DESTDIR="${pkgdir}"
+  )
+  cd \
+    "${_tarname}"
+  make \
+    "${_make_opts[@]}" \
+    install-doc \
+    install-man
+  install \
+    -Dm644 \
+    "COPYING" \
+    -t \
+    "${pkgdir}/usr/share/licenses/${pkgname}/"
 }
 
 # vim: ft=sh syn=sh et
