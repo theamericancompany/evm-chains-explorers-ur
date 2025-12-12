@@ -69,9 +69,9 @@ if [[ "${_docs}" == "true" ]]; then
     "${pkgbase}-docs"
   )
 fi
-pkgver="0.0.0.0.0.0.0.0.0.0.1"
+pkgver="0.0.0.0.0.0.0.0.0.0.1.1"
 _commit="e1a9a0d902f87d9d289a065fe7a53acf17ce2f16"
-pkgrel=4
+pkgrel=1
 _pkgdesc=(
   "Retrieval tool for EVM chains explorers."
 )
