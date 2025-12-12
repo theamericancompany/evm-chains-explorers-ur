@@ -71,7 +71,7 @@ if [[ "${_docs}" == "true" ]]; then
 fi
 pkgver="0.0.0.0.0.0.0.0.0.0.1"
 _commit="fdfac9bc66640f1bacff584deaebd2fb35315cad"
-pkgrel=2
+pkgrel=3
 _pkgdesc=(
   "Retrieval tool for EVM chains explorers."
 )
@@ -208,7 +208,7 @@ package_evm-chains-explorers-docs() {
   pkgdesc="${pkgdesc} (documentation)"
   depends=()
   optdepends=(
-    "${_evm_chains_explorers_ref_optdepends[*]}"
+    "${_evm_chains_explorers_docs_ref_optdepends[*]}"
   )
   provides=()
   _make_opts+=(
