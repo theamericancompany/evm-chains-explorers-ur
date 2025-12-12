@@ -70,8 +70,8 @@ if [[ "${_docs}" == "true" ]]; then
   )
 fi
 pkgver="0.0.0.0.0.0.0.0.0.0.1"
-_commit="fdfac9bc66640f1bacff584deaebd2fb35315cad"
-pkgrel=3
+_commit="e1a9a0d902f87d9d289a065fe7a53acf17ce2f16"
+pkgrel=4
 _pkgdesc=(
   "Retrieval tool for EVM chains explorers."
 )
@@ -128,14 +128,16 @@ _tarfile="${_tarname}.${_archive_format}"
 if [[ "${_offline}" == "true" ]]; then
   _url="file://${HOME}/${pkgname}"
 fi
-_gitlab_sum='ec3ca319fe7df4333b6626a64d5e1965f05c788ce8e34415e04e3a5f889533d9'
-_gitlab_sig_sum='c3027b9ae9c7954f0560094d13b2c35271e1de89c3f5ea4af95b55ac48359f6e'
+_gitlab_sum="168709ed2f5ba09cc6c9bfb6d1b0973b3d44b0822ceaf147e0f40ccc9df4d30b"
+_gitlab_sig_sum="32126ece19316c5b0b2967a952824f743eb4f06d1108fd429aabe64258619818"
 _sum="${_gitlab_sum}"
 _sig_sum="${_gitlab_sig_sum}"
 _evmfs_network="100"
 _evmfs_address="0x69470b18f8b8b5f92b48f6199dcb147b4be96571"
 # Dvorak
 _evmfs_ns="0x87003Bd6C074C713783df04f36517451fF34CBEf"
+# Truocolo
+_evmfs_ns="0x6E5163fC4BFc1511Dbe06bB605cc14a3e462332b"
 _evmfs_dir="evmfs://${_evmfs_network}/${_evmfs_address}/${_evmfs_ns}"
 _evmfs_uri="${_evmfs_dir}/${_sum}"
 _evmfs_src="${_tarfile}::${_evmfs_uri}"
